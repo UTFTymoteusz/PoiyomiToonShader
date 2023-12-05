@@ -3365,6 +3365,17 @@ Shader ".poiyomi/Poiyomi 8.1/Poiyomi Toon Outline"
 		//Third party
 		[HideInInspector] m_thirdpartyCategory ("Third Party", Float) = 0
 		
+		//Funny
+		[HideInInspector] m_thirdpartyCategory ("AAVRL", Float) = 0
+		_AAVRLToggle1 ("AAVRL Toggle 1", Float) = 1
+		_AAVRLToggle2 ("AAVRL Toggle 2", Float) = 1
+		_AAVRLToggle3 ("AAVRL Toggle 3", Float) = 1
+		_AAVRLToggle4 ("AAVRL Toggle 4", Float) = 1
+		_AAVRLToggle5 ("AAVRL Toggle 5", Float) = 1
+		_AAVRLToggle6 ("AAVRL Toggle 6", Float) = 1
+		_AAVRLToggle7 ("AAVRL Toggle 7", Float) = 1
+		_AAVRLToggle8 ("AAVRL Toggle 8", Float) = 1
+		
 		// Rendering Options
 		[HideInInspector] m_postprocessing ("Post Processing", Float) = 0
 		[HideInInspector] m_start_PoiLightData ("PP Animations--{button_help:{text:Tutorial,action:{type:URL,data:https://www.poiyomi.com/post-processing/pp-animations},hover:Documentation}}", Float) = 0
@@ -3919,6 +3930,15 @@ Shader ".poiyomi/Poiyomi 8.1/Poiyomi Toon Outline"
 			#define LumaData(x,y) tex2Dlod(_Stored, float4(x, y, 0, 0))
 			//endex
 			
+			float _AAVRLToggle1;
+			float _AAVRLToggle2;
+			float _AAVRLToggle3;
+			float _AAVRLToggle4;
+			float _AAVRLToggle5;
+			float _AAVRLToggle6;
+			float _AAVRLToggle7;
+			float _AAVRLToggle8;
+
 			float _Mode;
 			
 			float _StochasticDeliotHeitzDensity;
@@ -7377,6 +7397,31 @@ Shader ".poiyomi/Poiyomi 8.1/Poiyomi Toon Outline"
 				float alpha;
 				float3 emission;
 			};
+
+			float AAVRLShouldDraw(
+				#ifndef POI_TESSELLATED
+				appdata v
+				#else
+				tessAppData v
+				#endif
+			) 
+			{
+				float slot = -floor(v.uv0.y);
+				float draw = 0.00;
+
+				draw += (slot == 0);
+				draw += (slot == 1) * _AAVRLToggle1;
+				draw += (slot == 2) * _AAVRLToggle2;
+				draw += (slot == 3) * _AAVRLToggle3;
+				draw += (slot == 4) * _AAVRLToggle4;
+				draw += (slot == 5) * _AAVRLToggle5;
+				draw += (slot == 6) * _AAVRLToggle6;
+				draw += (slot == 7) * _AAVRLToggle7;
+				draw += (slot == 8) * _AAVRLToggle8;
+
+				return draw;
+			}
+			
 			
 			// glsl_mod behaves better on negative numbers, and
 			// in some situations actually outperforms HLSL's fmod()
@@ -9022,7 +9067,7 @@ Shader ".poiyomi/Poiyomi 8.1/Poiyomi Toon Outline"
 			}
 			#endif
 			//endex
-			
+
 			VertexOut vert(
 			#ifndef POI_TESSELLATED
 			appdata v
@@ -9031,6 +9076,11 @@ Shader ".poiyomi/Poiyomi 8.1/Poiyomi Toon Outline"
 			#endif
 			)
 			{
+				if (AAVRLShouldDraw(v) == 0.00)
+				{
+					return (VertexOut)POI_NAN;
+				}
+
 				UNITY_SETUP_INSTANCE_ID(v);
 				VertexOut o;
 				PoiInitStruct(VertexOut, o);
@@ -9039,7 +9089,7 @@ Shader ".poiyomi/Poiyomi 8.1/Poiyomi Toon Outline"
 				UNITY_SETUP_STEREO_EYE_INDEX_POST_VERTEX(v);
 				#endif
 				UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(o);
-				
+
 				//ifex _EnableUDIMDiscardOptions==0
 				#ifdef POI_UDIMDISCARD
 				UNITY_BRANCH
@@ -9492,6 +9542,7 @@ Shader ".poiyomi/Poiyomi 8.1/Poiyomi Toon Outline"
 				worldDirection.w = dot(o.pos, CalculateFrustumCorrection());
 				o.worldDirection = worldDirection;
 				#endif
+
 				return o;
 			}
 			
@@ -17690,6 +17741,15 @@ Shader ".poiyomi/Poiyomi 8.1/Poiyomi Toon Outline"
 			#define LumaData(x,y) tex2Dlod(_Stored, float4(x, y, 0, 0))
 			//endex
 			
+			float _AAVRLToggle1;
+			float _AAVRLToggle2;
+			float _AAVRLToggle3;
+			float _AAVRLToggle4;
+			float _AAVRLToggle5;
+			float _AAVRLToggle6;
+			float _AAVRLToggle7;
+			float _AAVRLToggle8;
+
 			float _Mode;
 			
 			float _StochasticDeliotHeitzDensity;
@@ -19202,6 +19262,30 @@ Shader ".poiyomi/Poiyomi 8.1/Poiyomi Toon Outline"
 				float alpha;
 				float3 emission;
 			};
+
+			float AAVRLShouldDraw(
+				#ifndef POI_TESSELLATED
+				appdata v
+				#else
+				tessAppData v
+				#endif
+			) 
+			{
+				float slot = -floor(v.uv0.y);
+				float draw = 0.00;
+
+				draw += (slot == 0);
+				draw += (slot == 1) * _AAVRLToggle1;
+				draw += (slot == 2) * _AAVRLToggle2;
+				draw += (slot == 3) * _AAVRLToggle3;
+				draw += (slot == 4) * _AAVRLToggle4;
+				draw += (slot == 5) * _AAVRLToggle5;
+				draw += (slot == 6) * _AAVRLToggle6;
+				draw += (slot == 7) * _AAVRLToggle7;
+				draw += (slot == 8) * _AAVRLToggle8;
+
+				return draw;
+			}
 			
 			// glsl_mod behaves better on negative numbers, and
 			// in some situations actually outperforms HLSL's fmod()
@@ -20820,6 +20904,11 @@ Shader ".poiyomi/Poiyomi 8.1/Poiyomi Toon Outline"
 			#endif
 			)
 			{
+				if (AAVRLShouldDraw(v) == 0.00)
+				{
+					return (VertexOut)POI_NAN;
+				}
+
 				UNITY_SETUP_INSTANCE_ID(v);
 				VertexOut o;
 				PoiInitStruct(VertexOut, o);
@@ -25108,6 +25197,15 @@ Shader ".poiyomi/Poiyomi 8.1/Poiyomi Toon Outline"
 			#define LumaData(x,y) tex2Dlod(_Stored, float4(x, y, 0, 0))
 			//endex
 			
+			float _AAVRLToggle1;
+			float _AAVRLToggle2;
+			float _AAVRLToggle3;
+			float _AAVRLToggle4;
+			float _AAVRLToggle5;
+			float _AAVRLToggle6;
+			float _AAVRLToggle7;
+			float _AAVRLToggle8;
+			
 			float _Mode;
 			
 			float _StochasticDeliotHeitzDensity;
@@ -28236,6 +28334,30 @@ Shader ".poiyomi/Poiyomi 8.1/Poiyomi Toon Outline"
 				float alpha;
 				float3 emission;
 			};
+
+			float AAVRLShouldDraw(
+				#ifndef POI_TESSELLATED
+				appdata v
+				#else
+				tessAppData v
+				#endif
+			) 
+			{
+				float slot = -floor(v.uv0.y);
+				float draw = 0.00;
+
+				draw += (slot == 0);
+				draw += (slot == 1) * _AAVRLToggle1;
+				draw += (slot == 2) * _AAVRLToggle2;
+				draw += (slot == 3) * _AAVRLToggle3;
+				draw += (slot == 4) * _AAVRLToggle4;
+				draw += (slot == 5) * _AAVRLToggle5;
+				draw += (slot == 6) * _AAVRLToggle6;
+				draw += (slot == 7) * _AAVRLToggle7;
+				draw += (slot == 8) * _AAVRLToggle8;
+
+				return draw;
+			}
 			
 			// glsl_mod behaves better on negative numbers, and
 			// in some situations actually outperforms HLSL's fmod()
@@ -29890,6 +30012,11 @@ Shader ".poiyomi/Poiyomi 8.1/Poiyomi Toon Outline"
 			#endif
 			)
 			{
+				if (AAVRLShouldDraw(v) == 0.00)
+				{
+					return (VertexOut)POI_NAN;
+				}
+
 				UNITY_SETUP_INSTANCE_ID(v);
 				VertexOut o;
 				PoiInitStruct(VertexOut, o);
@@ -37983,6 +38110,15 @@ Shader ".poiyomi/Poiyomi 8.1/Poiyomi Toon Outline"
 			#define LumaData(x,y) tex2Dlod(_Stored, float4(x, y, 0, 0))
 			//endex
 			
+			float _AAVRLToggle1;
+			float _AAVRLToggle2;
+			float _AAVRLToggle3;
+			float _AAVRLToggle4;
+			float _AAVRLToggle5;
+			float _AAVRLToggle6;
+			float _AAVRLToggle7;
+			float _AAVRLToggle8;
+			
 			float _Mode;
 			
 			float _StochasticDeliotHeitzDensity;
@@ -39303,6 +39439,30 @@ Shader ".poiyomi/Poiyomi 8.1/Poiyomi Toon Outline"
 				float alpha;
 				float3 emission;
 			};
+
+			float AAVRLShouldDraw(
+				#ifndef POI_TESSELLATED
+				appdata v
+				#else
+				tessAppData v
+				#endif
+			) 
+			{
+				float slot = -floor(v.uv0.y);
+				float draw = 0.00;
+
+				draw += (slot == 0);
+				draw += (slot == 1) * _AAVRLToggle1;
+				draw += (slot == 2) * _AAVRLToggle2;
+				draw += (slot == 3) * _AAVRLToggle3;
+				draw += (slot == 4) * _AAVRLToggle4;
+				draw += (slot == 5) * _AAVRLToggle5;
+				draw += (slot == 6) * _AAVRLToggle6;
+				draw += (slot == 7) * _AAVRLToggle7;
+				draw += (slot == 8) * _AAVRLToggle8;
+
+				return draw;
+			}
 			
 			// glsl_mod behaves better on negative numbers, and
 			// in some situations actually outperforms HLSL's fmod()
@@ -40921,6 +41081,11 @@ Shader ".poiyomi/Poiyomi 8.1/Poiyomi Toon Outline"
 			#endif
 			)
 			{
+				if (AAVRLShouldDraw(v) == 0.00)
+				{
+					return (VertexOut)POI_NAN;
+				}
+				
 				UNITY_SETUP_INSTANCE_ID(v);
 				VertexOut o;
 				PoiInitStruct(VertexOut, o);
